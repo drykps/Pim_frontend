@@ -5,7 +5,7 @@ import {api} from '../../api';
 //para importar o css, venho direto aqui tbm
 import './index.css';
 
-import Indices from '../../components/Indices';
+import Indices from '../../components/indices';
 
 //stateless components - criamos componentes por meio de variaveis
 //pode tirar os parenteses se desejar

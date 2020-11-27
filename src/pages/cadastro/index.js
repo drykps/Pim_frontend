@@ -25,29 +25,32 @@ function Cadastro() {
   const {logado} = useContext(AuthContext);
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [senha, setSenha] = useState('');
   const [coPassword, setCoPassword] = useState('');
   const [tipoUsuario, setTipoPessoa] = useState(queryTipoPessoa);
   const [documento, setDocumento] = useState('');
 
   const [ error, setError] = useState('');
-    console.log(tipoUsuario);
+  const [loadingButton, setLoadingButton] = useState(false);
+
   const handleCadastro = async e => {
     e.preventDefault();
 
     setError('');
 
-    if ( !nome || !email || !password || !coPassword || !documento) {
+    if ( !nome || !email || !senha || !coPassword || !documento) {
       setError("Todos os campos são obrigatorios.");
       return;
     }
 
-    if(password === coPassword ){
+    if(senha === coPassword ){
       setError("As senhas não são iguais.");
+      return; 
     }
 
-    if(password.length < 6 ){
+    if(senha.length < 6 ){
       setError("A senha deve possuir no minimo 6 caracteres.");
+      return;
     }
 
     if ( tipoUsuario  === 'ROLE_CLIENTEPF'  && !validarCpf(documento) ) {      
@@ -61,18 +64,24 @@ function Cadastro() {
     }
 
     try {
-      await backend.post("/usuario", { nome, email, password, tipoUsuario, documento });
-      this.props.history.push("/");
+      setLoadingButton(true);
+      const res = await backend.post("/usuario", { nome, email,   senha, tipoUsuario, documento });
+
+      if(res.data.errors && res.data.errors.length > 0){
+        setError(res.data.errors[0]);
+        setLoadingButton(false);
+      }else{
+        alert('Usuario cadastrado com sucesso.');
+        return <Redirect to="/" />;
+      }
+
     } catch (err) {
       console.log(err);
+      setLoadingButton(false);
       setError("Ocorreu um erro ao cadastrar sua conta.");
     }
 
   };
-  
-  if(logado){
-    return <Redirect to="/" />;
-  }
   
   return (
         <div className="d-flex h-100">
@@ -95,7 +104,7 @@ function Cadastro() {
 
             <div className="form-group row">
               <label for="inputPassword" className="sr-only">Senha</label>
-              <input type="password" onChange={(event) => { setPassword(event.target.value); }} id="inputPassword" name="password" className="form-control" placeholder="Senha" required></input>
+              <input type="password" onChange={(event) => { setSenha(event.target.value); }} id="inputPassword" name="password" className="form-control" placeholder="Senha" required></input>
 
             </div>
 
@@ -137,8 +146,13 @@ function Cadastro() {
 
             <br></br>
 
-            <button className="btn btn-lg btn-primary btn-block" type="submit">Cadastrar</button>
+            <button className={`btn btn-lg btn-primary btn-block ${!loadingButton ?  '' : 'd-none'}`} type="submit">Cadastrar</button>
             
+            <button className={`btn btn-lg btn-primary btn-block ${loadingButton ? '' :'d-none'}`} type="button" disabled>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
+
             <br></br>
 
             <div className={  !error ?  'd-none' : 'alert alert-danger' } role="alert">

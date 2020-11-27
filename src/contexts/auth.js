@@ -4,13 +4,12 @@ import {backend} from '../api';
 
 import { KEY_TOKEN_STORAGE, KEY_USUARIO_STORAGE } from '../utils/constants';
 
-const AuthContext = React.createContext({});
+const   AuthContext = React.createContext({});
 
 const AuthProvider = ({ children }) => {         
     const [usuario, setUsuario] = useState({ informacoes:{  nome: 'Sem nome', iniciais: 'SN'  }, logado: false});
 
     const [loading, setLoading] = useState(true);
-    console.log({usuario});
 
     useEffect(() => {
         const storagedUser = localStorage.getItem(KEY_USUARIO_STORAGE);
@@ -28,6 +27,10 @@ const AuthProvider = ({ children }) => {
     // Login atualiza valores
     async function login(email, password) {     
         const res = await backend.post("/api/auth", { email, password });   
+
+        if(res.data.errors && res.data.erros.length > 0 ){
+            return res.data.erros[0];
+        }
 
         let informacoes = res.data.usuario;
         let token = res.data.token;

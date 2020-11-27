@@ -36,10 +36,10 @@ const Header = () => {
                         ENTRAR
                     </Nav.Link>
                 </Nav>
-            <form className={!usuario.logado ? 'd-none': 'form-inline my-2 my-lg-0'}>
+            <form className={!usuario.logado ? 'd-none': 'form-inline my-2 my-lg-0'}    >
                 <div className={dropdown ? 'dropdown show' : 'dropdown'}>
                     <span className="user-dropdown" data-letters={usuario.informacoes.iniciais} onClick={()=>{ setDropdown(!dropdown) }}>{usuario.informacoes.nome} &nbsp;&nbsp;</span>
-                    <div className={dropdown ? 'dropdown-menu show' : 'dropdown-menu'}>
+                    <div className={dropdown ? 'dropdown-menu show' : 'dropdown-menu'} onClick={()=>{ setDropdown(false) }} >
                         <h6 className="dropdown-header">Gerenciamento</h6>
                         <Link className="dropdown-item" to="/chave">Chaves</Link>
                         <Link className="dropdown-item" to="/categoria">Categoria</Link>

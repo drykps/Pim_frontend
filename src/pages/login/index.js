@@ -14,24 +14,26 @@ function Login() {
   const {usuario, login} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [ error, setError] = useState('');
+  const [error, setError] = useState('');
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const handleLogin = async e => {
     e.preventDefault();
     setError('');
-
+      
     if (email && password) {
-
+      
       if(password.length < 6 ){
         setError("A senha possui no minimo 6 caracteres.");
       }
-
-      try {
-        login(email, password);
-      } catch (err) {
-        console.log(err); 
-        setError("Ocorreu um erro ao loga-se sua conta.");
+      
+      setLoadingButton(true);
+      const erro =  await login(email, password);
+      if(erro){
+        setError(erro);
+        setLoadingButton(false);
       }
+      
     } else {
       setError("Preencha todos os dados para se cadastrar");
     }
@@ -54,7 +56,12 @@ function Login() {
             <label htmlFor="inputPassword" className="sr-only">Senha</label>
             <input type="password" onChange={(event) => { setPassword(event.target.value); }} id="inputPassword" name="password" className="form-control" placeholder="Senha" required></input>
           
-            <button className="btn btn-lg btn-primary btn-block" type="submit">Logar</button>
+            <button className={`btn btn-lg btn-primary btn-block ${!loadingButton ?  '' : 'd-none'}`} type="submit">Logar</button>
+            
+            <button className={`btn btn-lg btn-primary btn-block ${loadingButton ? '' :'d-none'}`} type="button" disabled>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Loading...
+            </button>
 
             <br></br>
 

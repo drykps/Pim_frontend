@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
-import { Navbar, Nav, Form} from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 
-import { Link, Redirect  } from "react-router-dom";
+import { Link    } from "react-router-dom";
+
+import { AuthContext } from '../../contexts/auth';
 //header é um component
 //cria uma pasta somente para ele pq vai ficar todos arquivos dele em um lugar só
  
@@ -10,53 +12,50 @@ import { Link, Redirect  } from "react-router-dom";
 import './index.css';
  
 //stateless components - criamos componentes por meio de variaveis
-//pode tirar os parenteses se desejar
-const usuarioLogado = () =>{
-    if(isUsuarioLogado()){
-        return JSON.parse(localStorage.getItem('user'));
+const Header = () => {
+    const {usuario, logout} = useContext(AuthContext);   
+    const [dropdown, setDropdown] = useState(false);
+
+    const handleLogout = ()  => {
+        logout();
     }
-    return {};
+
+    return(
+        <header>
+            <Navbar bg="dark" expand="lg" variant="dark">
+                <Navbar.Brand href="/">BlockchainStorage</Navbar.Brand>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="mr-auto">
+                    <Nav.Link href="/">Home</Nav.Link>
+                </Nav>  
+
+                <Nav className={usuario.logado ? 'd-none': ''}>
+                    <Nav.Link href="/cadastro">CADASTRE-SE</Nav.Link>
+                    <Nav.Link eventKey={2} href="/login">
+                        ENTRAR
+                    </Nav.Link>
+                </Nav>
+            <form className={!usuario.logado ? 'd-none': 'form-inline my-2 my-lg-0'}>
+                <div className={dropdown ? 'dropdown show' : 'dropdown'}>
+                    <span className="user-dropdown" data-letters={usuario.informacoes.iniciais} onClick={()=>{ setDropdown(!dropdown) }}>{usuario.informacoes.nome} &nbsp;&nbsp;</span>
+                    <div className={dropdown ? 'dropdown-menu show' : 'dropdown-menu'}>
+                        <h6 className="dropdown-header">Gerenciamento</h6>
+                        <Link className="dropdown-item" to="/chave">Chaves</Link>
+                        <Link className="dropdown-item" to="/categoria">Categoria</Link>
+                        <div className="dropdown-divider"></div>
+                        <h6 className="dropdown-header">Usuario</h6>
+                        <Link className="dropdown-item" to="/usuario">Perfil</Link>
+                        <div className="dropdown-divider"></div>
+                        <button className="dropdown-item btn btn-warning" type="button" onClick={()=>{ handleLogout()}}>Sair</button>
+                    </div>
+
+                </div>
+            </form>
+        </Navbar.Collapse>
+        </Navbar>
+    </header>
+    )
 };
-
-const isUsuarioLogado = () =>{
-    const token = localStorage.getItem('token');
-    console.log(token);
-    return !!token;
-}
-
-const deslogarUsuario = () =>{
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    console.log("teste");
-    return <Redirect to="/"  />
-}
-
-
-const Header = () => (
-    <header>
-        <Navbar bg="dark" expand="lg" variant="dark">
-    <Navbar.Brand href="/">BlockchainStorage</Navbar.Brand>
-    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-            <Link to="/">Home</Link> &nbsp;&nbsp;
-            <Link to="/chave">Gerenciamento</Link> &nbsp;&nbsp;
-            <Link to="/categoria">Categoria</Link> &nbsp;&nbsp;
-        </Nav>
-        <div className={isUsuarioLogado() ? 'd-none': ''}>
-            <Form inline>
-                <Link to="/cadastro">CADASTRE-SE</Link> &nbsp;&nbsp;&nbsp;&nbsp;
-                <Link to="/login">ENTRAR</Link>
-            </Form>
-        </div>
-        <div className={!isUsuarioLogado() ? 'd-none': ''}>
-            <span>{usuarioLogado().email}</span>
-            <Link to="/usuario">Usuário</Link>&nbsp;&nbsp;
-            <button type="button" class="btn btn-warning" onClick={()=>{ deslogarUsuario()}}>Sair</button>
-        </div>
-    </Navbar.Collapse>
-    </Navbar>
-</header>
-);
 
 export default Header;

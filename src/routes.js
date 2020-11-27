@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import Header from './components/header';
-import Footer from './components/footer';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 
-import Home from './pages/main';
-import Chaves from './pages/chave';
+import Home from './pages/Home';
 import DetalhesUsuario from './pages/usuario/detalhes';
-import CriarUsuario from './pages/usuario/criar';
-import Login from './pages/login';
-import Categoria from './pages/categoria';
- 
+import Cadastro from './pages/Cadastro';
+import Login from './pages/Login';
+import CategoriaBrowser from './pages/Categoria/Browser';
+import CategoriaIncluir from './pages/Categoria/Incluir';
+import CategoriaConsultar from './pages/Categoria/Consulta';
+import CategoriaExcluir from './pages/Categoria/Excluir';
+import CategoriaAlterar from './pages/Categoria/Alterar';
+import ChaveBrowser from './pages/Chave/Browser';
+import ChaveIncluir from './pages/Chave/Incluir';
+import ChaveConsultar from './pages/Chave/Consulta';
+import ChaveExcluir from './pages/Chave/Excluir';
+import ChaveAlterar from './pages/Chave/Alterar';
 
+import {AuthContext} from './contexts/auth' ;
+import Loading from './components/Loading';
 
-
-function PrivateRoute ({component: Component, authed, ...rest}) {
+// && ( user.informacoes.tipoUsuario === 'ROLE_ADMIN' ||  role === user.informacoes.tipoUsuario )
+function PrivateRoute ({component: Component, user, role, ...rest}) {
+    console.log({user, role});
     return (
         <Route
         {...rest}
-        render={(props) => authed === true
+        render={(props) => user.logado === true
             ? <Component {...props} />
             : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
         />
@@ -26,30 +36,37 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
 }
 
 const Routes = () => {
-    let isUsuarioLogado = false;
+    const {usuario, loading} = useContext(AuthContext);
 
-    const token = localStorage.getItem('token');
-    if(token){
-        const usuario = localStorage.getItem('user');
-        console.log(token);
-        isUsuarioLogado = true;
+    if (loading) {
+        return (
+          <Loading></Loading>
+        );
     }
-    
+
     return (
-    <BrowserRouter>
-        <Header />
-        <div>
-            <Switch>
-                <Route exact path="/"><Home></Home></Route>
-                <PrivateRoute authed={isUsuarioLogado} path='/chave' component={Chaves} />
-                <PrivateRoute authed={isUsuarioLogado} path='/usuario' component={DetalhesUsuario} />
-                <Route exact path="/cadastro" component={CriarUsuario} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/categoria" component={Categoria} />
-            </Switch>
-        </div>
-        <Footer></Footer>
-    </BrowserRouter>
+        <BrowserRouter>
+                <Header />
+                <div className="conteudo-principal">
+                        <Switch>
+                            <Route exact path="/"><Home></Home></Route>
+                            <PrivateRoute user={usuario} path='/usuario' component={DetalhesUsuario} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" exact path='/categoria' component={CategoriaBrowser} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/categoria/novo' component={CategoriaIncluir} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/categoria/alterar/:id' component={CategoriaAlterar} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/categoria/excluir/:id' component={CategoriaExcluir} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/categoria/:id' component={CategoriaConsultar} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" exact path='/chave' component={ChaveBrowser} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/chave/novo' component={ChaveIncluir} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/chave/alterar/:id' component={ChaveAlterar} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/chave/excluir/:id' component={ChaveExcluir} />
+                            <PrivateRoute user={usuario} role="ROLE_ADMIN" path='/chave/:id' component={ChaveConsultar} />
+                            <Route exact path="/cadastro" component={Cadastro} />
+                            <Route exact path="/login" component={Login} />
+                        </Switch>
+                </div>
+                <Footer></Footer>
+            </BrowserRouter>
 )
     }
  

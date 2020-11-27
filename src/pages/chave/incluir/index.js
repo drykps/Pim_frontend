@@ -57,7 +57,7 @@ function ChaveIncluir() {
 
             <div className="form-group row">
               <label htmlFor="inputDescricao" className="sr-only">Descrição</label>
-              <textarea onChange={(event) => { setChave( prev => ({ ...prev, valorChave: event.target.value})); }}  value={chave.valorChave} id="inputDescricao" name="valorChave" className="form-control" placeholder="Descricao" required ></textarea>
+              <textarea onChange={(event) => { setChave( prev => ({ ...prev, valorChave: event.target.value})); }}  value={chave.valorChave} id="inputDescricao" name="valorChave" className="form-control" placeholder="Valor Chave" required ></textarea>
 
             </div>
 

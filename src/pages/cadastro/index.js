@@ -43,11 +43,6 @@ function Cadastro() {
       return;
     }
 
-    if(senha === coPassword ){
-      setError("As senhas não são iguais.");
-      return; 
-    }
-
     if(senha.length < 6 ){
       setError("A senha deve possuir no minimo 6 caracteres.");
       return;

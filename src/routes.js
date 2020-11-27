@@ -1,30 +1,29 @@
 import React, { useContext } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/header';
+import Footer from './components/footer';
 
 
-import Home from './pages/Home';
+import Home from './pages/home';
 import DetalhesUsuario from './pages/usuario/detalhes';
-import Cadastro from './pages/Cadastro';
-import Login from './pages/Login';
-import CategoriaBrowser from './pages/Categoria/Browser';
-import CategoriaIncluir from './pages/Categoria/Incluir';
-import CategoriaConsultar from './pages/Categoria/Consulta';
-import CategoriaExcluir from './pages/Categoria/Excluir';
-import CategoriaAlterar from './pages/Categoria/Alterar';
-import ChaveBrowser from './pages/Chave/Browser';
-import ChaveIncluir from './pages/Chave/Incluir';
-import ChaveConsultar from './pages/Chave/Consulta';
-import ChaveExcluir from './pages/Chave/Excluir';
-import ChaveAlterar from './pages/Chave/Alterar';
+import Cadastro from './pages/cadastro';
+import Login from './pages/login';
+import CategoriaBrowser from './pages/categoria/browser';
+import CategoriaIncluir from './pages/categoria/incluir';
+import CategoriaConsultar from './pages/categoria/consulta';
+import CategoriaExcluir from './pages/categoria/excluir';
+import CategoriaAlterar from './pages/categoria/alterar';
+import ChaveBrowser from './pages/chave/browser';
+import ChaveIncluir from './pages/chave/incluir';
+import ChaveConsultar from './pages/chave/consulta';
+import ChaveExcluir from './pages/chave/excluir';
+import ChaveAlterar from './pages/chave/alterar';
 
 import {AuthContext} from './contexts/auth' ;
-import Loading from './components/Loading';
+import Loading from './components/loading';
 
 // && ( user.informacoes.tipoUsuario === 'ROLE_ADMIN' ||  role === user.informacoes.tipoUsuario )
 function PrivateRoute ({component: Component, user, role, ...rest}) {
-    console.log({user, role});
     return (
         <Route
         {...rest}

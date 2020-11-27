@@ -26,7 +26,7 @@ function ChaveExcluir() {
         e.preventDefault();
 
         try {
-            const res = await backend.delete(`/chave/${id}`);
+            await backend.delete(`/chave/${id}`);
 
             history.replace(`/chave`);
         } catch (err) {

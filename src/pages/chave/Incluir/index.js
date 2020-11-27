@@ -12,7 +12,18 @@ function ChaveIncluir() {
     
     let history = useHistory();
 
-    async function handleCadastro (e){
+    useEffect(() => {
+      const fetchData = async () => {
+        const result = await backend.get('/categoria/0/10')
+   
+        setCategorias(result.data.data.content);
+      };
+   
+      fetchData();
+    }, []);
+ 
+
+  async function handleCadastro (e){
         e.preventDefault();
 
         setError('');

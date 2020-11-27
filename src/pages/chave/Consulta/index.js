@@ -1,5 +1,5 @@
 import React, { useEffect, useState  } from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { backend  } from '../../../api';
 import './index.css';
 
@@ -7,7 +7,6 @@ import './index.css';
 function ChaveConsulta({role}) {
     let { id } = useParams();
     const [chave, setChave] = useState({});
-    let { url } = useRouteMatch();
     
     useEffect(() => {
         const fetchData = async () => {

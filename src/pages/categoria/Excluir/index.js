@@ -26,7 +26,7 @@ function CategoriaExcluir() {
         e.preventDefault();
 
         try {
-            const res = await backend.delete(`/categoria/${id}`);
+            await backend.delete(`/categoria/${id}`);
 
             history.replace(`/categoria`);
         } catch (err) {

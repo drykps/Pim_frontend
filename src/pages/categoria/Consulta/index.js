@@ -1,5 +1,5 @@
 import React, { useEffect, useState  } from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { backend  } from '../../../api';
 import './index.css';
 
@@ -8,8 +8,6 @@ function CategoriaConsulta({role}) {
     let { id } = useParams();
     const [categoria, setCategoria] = useState({});
 
-    let { url } = useRouteMatch();
-    
     console.log(categoria);
 
     useEffect(() => {

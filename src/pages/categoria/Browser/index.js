@@ -42,7 +42,8 @@ function CategoriaBrowser() {
                             </tr>
                         </thead>
                         <tbody>
-                            {categorias.map((categoria, index) => (
+                            {categorias.length  ===  0 ? <tr><td colSpan="7"  class="text-center"><span>Nenhum item a exibir</span></td></tr> : ''}
+                            {categorias.length > 0 && categorias.map((categoria, index) => (
                                 <tr key={categoria.id}>
                                     <th scope="row"></th>
                                     <td>{categoria.nome}</td>

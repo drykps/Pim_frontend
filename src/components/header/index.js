@@ -42,11 +42,9 @@ const Header = () => {
                     <div className={dropdown ? 'dropdown-menu show' : 'dropdown-menu'} onClick={()=>{ setDropdown(false) }} >
                         <h6 className="dropdown-header">Gerenciamento</h6>
                         <Link className="dropdown-item" to="/chave">Chaves</Link>
-                        <Link className="dropdown-item" to="/categoria">Categoria</Link>
+                        <Link className={usuario.informacoes.tipoUsuario === 'ROLE_ADMIN' ? "dropdown-item" : 'd-none'} to="/categoria">Categoria</Link>
                         <div className="dropdown-divider"></div>
-                        <h6 className="dropdown-header">Usuario</h6>
-                        <Link className="dropdown-item" to="/usuario">Perfil</Link>
-                        <div className="dropdown-divider"></div>
+                        
                         <button className="dropdown-item btn btn-warning" type="button" onClick={()=>{ handleLogout()}}>Sair</button>
                     </div>
 

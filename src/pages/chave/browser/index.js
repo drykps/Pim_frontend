@@ -38,13 +38,12 @@ function ChaveBrowser() {
                                 <th scope="col">Chave</th>
                                 <th scope="col">Categoria</th>
                                 <th scope="col">Criado em</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
+                                <th className="text-center" scope="col" colSpan="3 ">Ação</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {chaves.map((chave, index) => (
+                        <tbody> 
+                            {chaves.length  ===  0 ? <tr><td colSpan="7"  class="text-center"><span>Nenhum item a exibir</span></td></tr> : ''}
+                            {chaves.length  >  0 && chaves.map((chave, index) => (
                                 <tr key={chave.id}>
                                     <th scope="row"></th>
                                     <td>{chave.nomeChave}</td>

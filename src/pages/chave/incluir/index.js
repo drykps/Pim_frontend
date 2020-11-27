@@ -7,7 +7,7 @@ import './index.css';
 function ChaveIncluir() {
 
     const [chave, setChave] = useState({});
-    const [categorias, setCategorias] = useState({});
+    const [categorias, setCategorias] = useState([]);
     const [ error, setError] = useState('');
     
     let history = useHistory();
@@ -29,15 +29,19 @@ function ChaveIncluir() {
         setError('');
         try {
 
+          if(chave.idCategoria &&  chave.nomeChave && chave.valorChave ){
             console.log(chave);
-            const res = await backend.post("/chave", { nomeChave: chave.nomeChave, valorChave: chave.valorChave });
-
+            const res = await backend.post("/chave", { nomeChave: chave.nomeChave, valorChave: chave.valorChave,  idCategoria: chave.idCategoria });
+  
             history.replace(`/chave/${res.data.data.id}`);
+            
+          }
+
           } catch (err) {
             console.log(err);
             setError("Ocorreu um erro ao cadastrar sua conta.");
         }
-    }
+  }
 
     return (
         <div className="d-flex h-100">
@@ -59,8 +63,9 @@ function ChaveIncluir() {
 
             <div className="form-group row">
               <label htmlFor="inputDescricao" className="sr-only">CATEGORIA</label>
-              <select onChange={(event) => { setChave( prev => ({ ...prev, valorChave: event.target.value})); }}  value={chave.valorChave} id="inputDescricao" name="valorChave" className="form-control" placeholder="Descricao" required >
-                  {categorias}
+              <select onChange={(event) => { setChave( prev => ({ ...prev, idCategoria: event.target.value})); }}  value={chave.idCategoria} id="categoria" name="categoria" className="form-control" required >
+                <option selected >SELECIONE UMA CATEGORIA</option>
+                {categorias.map( (categoria)  => (<option value={categoria.id} >{categoria.nome}</option>)  )}
               </select>
 
             </div>

@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
     async function login(email, password) {     
         const res = await backend.post("/api/auth", { email, password });   
 
-        if(res.data.errors && res.data.erros.length > 0 ){
+        if(res.data.erros && res.data.erros.length > 0 ){
             return res.data.erros[0];
         }
 
